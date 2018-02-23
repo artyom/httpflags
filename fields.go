@@ -1,6 +1,6 @@
-// Package httpflags provides a conveniet way of filling struct fields from http
-// request form values. Exposed struct fields should have special `flag` tag
-// attached:
+// Package httpflags provides a convenient way of filling struct fields from
+// http request form values. Exposed struct fields should have special `flag`
+// tag attached:
 //
 //	args := struct {
 //		Name    string `flag:"name"`
@@ -26,14 +26,14 @@
 // 		}
 //		// use args fields here
 //
-// Parse() calls ParseForm method of http.Request automatically, so it would
-// understand data both from the URL field's query parameters and the POST or
-// PUT form.
+// Parse() calls ParseForm method of http.Request automatically, so it
+// understands parsed values both from the URL field's query parameters and the
+// POST or PUT form data.
 //
 // Package httpflags supports all basic types supported by xxxVar functions from
 // standard library flag package: int, int64, uint, uint64, float64, bool,
 // string, time.Duration as well as types implementing flag.Value interface.
-// Parse would panic on non-empty `flag` tag on unsupported type field.
+// Parse panics on non-empty `flag` tag on unsupported type field.
 package httpflags
 
 import (
