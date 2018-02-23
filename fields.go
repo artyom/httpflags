@@ -40,6 +40,8 @@ import (
 	"flag"
 	"io/ioutil"
 	"net/http"
+	"reflect"
+	"strings"
 
 	"github.com/artyom/autoflags"
 )
@@ -55,9 +57,22 @@ func Parse(dst interface{}, r *http.Request) error {
 	fs := new(flag.FlagSet)
 	fs.SetOutput(ioutil.Discard)
 	autoflags.DefineFlagSet(fs, dst)
-	args := make([]string, 0, len(r.Form))
-	for k := range r.Form {
-		args = append(args, "-"+k+"="+r.Form.Get(k))
+	// this explicitly skips some sanity checks that are already done by
+	// autoflags.DefineFlagSet
+	st := reflect.Indirect(reflect.ValueOf(dst))
+	args := make([]string, 0, st.NumField())
+	for i := 0; i < st.NumField(); i++ {
+		tag := st.Type().Field(i).Tag.Get("flag")
+		if tag == "" {
+			continue
+		}
+		key := tag
+		if idx := strings.IndexRune(tag, ','); idx != -1 {
+			key = tag[:idx]
+		}
+		if val := r.Form.Get(key); val != "" {
+			args = append(args, "-"+key+"="+val)
+		}
 	}
 	return fs.Parse(args)
 }
