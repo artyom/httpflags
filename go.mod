@@ -1,3 +1,5 @@
 module github.com/artyom/httpflags
 
-require github.com/artyom/autoflags v1.0.0
+go 1.14
+
+require github.com/artyom/autoflags v1.1.1

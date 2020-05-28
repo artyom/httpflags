@@ -70,8 +70,10 @@ func Parse(dst interface{}, r *http.Request) error {
 		if idx := strings.IndexRune(tag, ','); idx != -1 {
 			key = tag[:idx]
 		}
-		if val := r.Form.Get(key); val != "" {
-			args = append(args, "-"+key+"="+val)
+		for _, val := range r.Form[key] {
+			if val != "" {
+				args = append(args, "-"+key+"="+val)
+			}
 		}
 	}
 	return fs.Parse(args)
